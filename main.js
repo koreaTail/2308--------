@@ -47,7 +47,6 @@ function displayMemo(memo) {
 
         document.getElementById("add-button").textContent = "저장";
         memoToEdit = memo;
-        memoItem.remove();
 
 
         var indexToEdit = memoList.findIndex(m => m.content === memoToEdit.textContent);
@@ -163,3 +162,23 @@ document.getElementById("add-button").addEventListener("click", function () {
 });
 
 loadMemosFromLocalStorage();
+
+// Ensure the code runs after the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", function () {
+    // Dark mode toggle logic
+    document.getElementById("dark-mode-toggle").addEventListener("click", function () {
+        if (document.body.classList.contains("dark-mode")) {
+            document.body.classList.remove("dark-mode");
+            localStorage.setItem("theme", "light");
+        } else {
+            document.body.classList.add("dark-mode");
+            localStorage.setItem("theme", "dark");
+        }
+    });
+
+    // Load user's theme preference from local storage
+    var savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+    }
+});

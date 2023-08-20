@@ -56,3 +56,37 @@ button {
     margin-right: 10px;
     margin-top: 10px;
 }
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #FFFFFF;
+}
+
+body.dark-mode header {
+    background-color: #1F1F1F;
+}
+
+body.dark-mode .memo-list,
+body.dark-mode .memo,
+body.dark-mode textarea {
+    background-color: #1F1F1F;
+    color: #FFFFFF;
+    border-color: #2C2C2C;
+}
+
+body.dark-mode button {
+    background-color: #2C2C2C;
+    color: #FFFFFF;
+}
+
+#dark-mode-toggle {
+    display: block;
+    margin: 20px auto;
+    background-color: #2C2C2C;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
