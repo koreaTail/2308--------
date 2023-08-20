@@ -59,7 +59,46 @@ function displayMemo(memoText) {
         saveMemosToLocalStorage();
     });
 
+
     memoItem.appendChild(deleteButton);
+
+    var feedbackButton = document.createElement("button");
+    feedbackButton.textContent = "피드백";
+    feedbackButton.addEventListener("click", function () {
+        var feedbackInput = document.createElement("input");
+        feedbackInput.type = "text";
+        feedbackInput.placeholder = "피드백을 입력하세요...";
+
+        var saveFeedbackButton = document.createElement("button");
+        saveFeedbackButton.textContent = "저장";
+        saveFeedbackButton.addEventListener("click", function () {
+            var feedbackText = feedbackInput.value;
+            if (feedbackText.trim() !== "") {
+                var feedbackDiv = document.createElement("div");
+                feedbackDiv.textContent = "피드백: " + feedbackText;
+                memoItem.appendChild(feedbackDiv);
+
+                // Update the memo object with the feedback
+                var index = memoList.findIndex(m => m.content === memoText);
+                if (index > -1) {
+                    if (!memoList[index].subMemos) {
+                        memoList[index].subMemos = [];
+                    }
+                    memoList[index].subMemos.push(feedbackText);
+                    saveMemosToLocalStorage();
+                }
+
+                // Remove the feedback input and save button after saving the feedback
+                memoItem.removeChild(feedbackInput);
+                memoItem.removeChild(saveFeedbackButton);
+            }
+        });
+
+        memoItem.appendChild(feedbackInput);
+        memoItem.appendChild(saveFeedbackButton);
+    });
+    memoItem.appendChild(feedbackButton);
+
 
 
     document.getElementById("memo-list").appendChild(memoItem);
