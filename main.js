@@ -12,12 +12,12 @@ function loadMemosFromLocalStorage() {
 
             displayMemo(memo);
 
-            // 메모에 대한 피드백을 표시합니다
+            // 메모에 대한 응답을 표시합니다
             if (memo.subMemos && memo.subMemos.length > 0) {
-                memo.subMemos.forEach(function (feedbackText) {
-                    var feedbackDiv = document.createElement("div");
-                    feedbackDiv.textContent = "피드백: " + feedbackText;
-                    document.getElementById("memo-list").lastChild.appendChild(feedbackDiv);
+                memo.subMemos.forEach(function (answerText) {
+                    var answerDiv = document.createElement("div");
+                    answerDiv.textContent = "응답: " + answerText;
+                    document.getElementById("memo-list").lastChild.appendChild(answerDiv);
                 });
             }
         });
@@ -34,8 +34,10 @@ function displayMemo(memo) {
     var memoItem = document.createElement("div");
     memoItem.className = "memo";
 
+
     var memoContent = document.createElement("div");
     memoContent.textContent = memo.content;
+    memoContent.classList.add("기도제목");
 
     var editButton = document.createElement("button");
     editButton.textContent = "수정";
@@ -87,43 +89,43 @@ function displayMemo(memo) {
 
     memoItem.appendChild(deleteButton);
 
-    var feedbackButton = document.createElement("button");
-    feedbackButton.textContent = "피드백";
-    feedbackButton.addEventListener("click", function () {
-        var feedbackInput = document.createElement("input");
-        feedbackInput.type = "text";
-        feedbackInput.placeholder = "피드백을 입력하세요...";
+    var answerButton = document.createElement("button");
+    answerButton.textContent = "주시는 마음";
+    answerButton.addEventListener("click", function () {
+        var answerInput = document.createElement("input");
+        answerInput.type = "text";
+        answerInput.placeholder = "메시지를 입력하세요...";
 
-        var saveFeedbackButton = document.createElement("button");
-        saveFeedbackButton.textContent = "저장";
-        saveFeedbackButton.addEventListener("click", function () {
-            var feedbackText = feedbackInput.value;
-            if (feedbackText.trim() !== "") {
-                var feedbackDiv = document.createElement("div");
-                feedbackDiv.textContent = "피드백: " + feedbackText;
-                memoItem.appendChild(feedbackDiv);
+        var saveanswerButton = document.createElement("button");
+        saveanswerButton.textContent = "저장";
+        saveanswerButton.addEventListener("click", function () {
+            var answerText = answerInput.value;
+            if (answerText.trim() !== "") {
+                var answerDiv = document.createElement("div");
+                answerDiv.textContent = "주신 마음: " + answerText;
+                memoItem.appendChild(answerDiv);
 
-                // Update the memo object with the feedback
+                // Update the memo object with the answer
                 var index = memoList.findIndex(m => m.content === memo.content);
                 if (index > -1) {
                     if (!memoList[index].subMemos) {
                         memoList[index].subMemos = [];
                     }
-                    memoList[index].subMemos.push(feedbackText);
+                    memoList[index].subMemos.push(answerText);
                     saveMemosToLocalStorage();
                 }
 
-                // 피드백을 저장한 후 피드백 입력 및 저장 버튼을 제거합니다
-                memoItem.removeChild(feedbackInput);
-                memoItem.removeChild(saveFeedbackButton);
+                // 응답을 저장한 후 응답 입력 및 저장 버튼을 제거합니다
+                memoItem.removeChild(answerInput);
+                memoItem.removeChild(saveanswerButton);
                 saveMemosToLocalStorage();
             }
         });
 
-        memoItem.appendChild(feedbackInput);
-        memoItem.appendChild(saveFeedbackButton);
+        memoItem.appendChild(answerInput);
+        memoItem.appendChild(saveanswerButton);
     });
-    memoItem.appendChild(feedbackButton);
+    memoItem.appendChild(answerButton);
 
 
 
@@ -143,9 +145,9 @@ document.getElementById("add-button").addEventListener("click", function () {
             document.getElementById("add-button").textContent = "추가";
         } else {
             var currentDate = new Date();
-            var formattedDate = currentDate.getFullYear() + "-" +
+            var formattedDate = "<" + currentDate.getFullYear() + "-" +
                 (currentDate.getMonth() + 1).toString().padStart(2, '0') + "-" +
-                currentDate.getDate().toString().padStart(2, '0');
+                currentDate.getDate().toString().padStart(2, '0') + ">";
 
             var newMemo = {
                 date: formattedDate,
