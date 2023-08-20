@@ -51,12 +51,15 @@ function displayMemo(memo) {
 
 
         var indexToEdit = memoList.findIndex(m => m.content === memoToEdit.textContent);
+        memoToEdit.index = indexToEdit;
+
         if (indexToEdit > -1) {
+            var memoText = document.getElementById("memo").value;
             memoList[indexToEdit].content = memoText;
-            // Re-assign the original date value to the edited memo
-            newMemo.date = memoList[indexToEdit].date;
-            memoList.splice(indexToEdit, 1, newMemo);  // Replace the original memo with the edited one
+            // Instead of creating a new memo, update the existing memo directly
+            memoList[indexToEdit].date = memoList[indexToEdit].date; // This line might not be necessary
         }
+
 
     });
 
@@ -144,9 +147,10 @@ document.getElementById("add-button").addEventListener("click", function () {
                 content: memoText,
                 subMemos: []
             };
-            if (indexToEdit > -1) {
-                memoList.splice(indexToEdit, 1, editedMemo);
-            } else {
+            if (memoToEdit && memoToEdit.index !== undefined) {
+                memoList.splice(memoToEdit.index, 1, editedMemo);
+            }
+            else {
                 memoList.push(editedMemo);
             }
 
