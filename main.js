@@ -47,6 +47,7 @@ function displayMemo(memo) {
 
         document.getElementById("add-button").textContent = "저장";
         memoToEdit = memo;
+        memoItem.remove();
 
 
         var indexToEdit = memoList.findIndex(m => m.content === memoToEdit.textContent);
