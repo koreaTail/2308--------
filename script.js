@@ -73,7 +73,16 @@ document.getElementById("add-button").addEventListener("click", function () {
             isEditing = false;
             memoToEdit = null;
             document.getElementById("memo").value = "";
+
             document.getElementById("add-button").textContent = "추가";
+
+            // Update the memo list with the edited content
+            var editedMemo = {
+                content: memoText,
+                subMemos: []
+            };
+            memoList.push(editedMemo);
+
         } else {
             var newMemo = {
                 content: memoText,
