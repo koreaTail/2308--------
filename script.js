@@ -32,7 +32,9 @@ function displayMemo(memoText) {
 
     editButton.addEventListener("click", function () {
         isEditing = true;
-        document.getElementById("memo").value = memoText;
+
+        document.getElementById("memo").value = memoContent.textContent;
+
         document.getElementById("add-button").textContent = "저장";
         memoToEdit = memoContent;
 
@@ -79,8 +81,10 @@ document.getElementById("add-button").addEventListener("click", function () {
             };
 
             memoList.push(newMemo);
+
             displayMemo(memoText);
-            document.getElementById("memo").value = "";
+            document.getElementById("memo").value = "";  // Clear the memo input field
+
         }
         // Save memos to local storage whenever a memo is added or edited
         saveMemosToLocalStorage();
