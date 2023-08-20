@@ -10,7 +10,7 @@ function loadMemosFromLocalStorage() {
         memoList = JSON.parse(storedMemos);
         memoList.forEach(function (memo) {
 
-            displayMemo(memo.content);
+            displayMemo(memo);
 
             // Display the feedbacks for the memo
             if (memo.subMemos && memo.subMemos.length > 0) {
@@ -31,12 +31,12 @@ function saveMemosToLocalStorage() {
 }
 
 // Function to display a memo
-function displayMemo(memoText) {
+function displayMemo(memo) {
     var memoItem = document.createElement("div");
     memoItem.className = "memo";
 
     var memoContent = document.createElement("div");
-    memoContent.textContent = memoText;
+    memoContent.textContent = memo.content;
 
     var editButton = document.createElement("button");
     editButton.textContent = "수정";
@@ -49,20 +49,27 @@ function displayMemo(memoText) {
         document.getElementById("add-button").textContent = "저장";
         memoToEdit = memoContent;
 
-        var indexToEdit = memoList.findIndex(m => m.content === memoText);
+        var indexToEdit = memoList.findIndex(m => m.content === memo.content);
         if (indexToEdit > -1) {
             memoList.splice(indexToEdit, 1);
         }
     });
 
 
+
+    var dateDiv = document.createElement("div");
+    dateDiv.className = "memo-date";
+    dateDiv.textContent = memo.date || '';
+    memoItem.appendChild(dateDiv);
+
     memoItem.appendChild(memoContent);
+
     memoItem.appendChild(editButton);
 
     var deleteButton = document.createElement("button");
     deleteButton.textContent = "삭제";
     deleteButton.addEventListener("click", function () {
-        var indexToDelete = memoList.findIndex(m => m.content === memoText);
+        var indexToDelete = memoList.findIndex(m => m.content === memo.content);
         if (indexToDelete > -1) {
             memoList.splice(indexToDelete, 1);
         }
@@ -134,14 +141,21 @@ document.getElementById("add-button").addEventListener("click", function () {
             memoList.push(editedMemo);
 
         } else {
+
+            var currentDate = new Date();
+            var formattedDate = currentDate.getFullYear() + "-" +
+                (currentDate.getMonth() + 1).toString().padStart(2, '0') + "-" +
+                currentDate.getDate().toString().padStart(2, '0');
+
             var newMemo = {
+                date: formattedDate,
                 content: memoText,
                 subMemos: []
             };
 
             memoList.push(newMemo);
+            displayMemo(newMemo);  // 전체 메모 객체를 전달합니다.
 
-            displayMemo(memoText);
             document.getElementById("memo").value = "";  // Clear the memo input field
 
         }
