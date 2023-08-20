@@ -9,7 +9,18 @@ function loadMemosFromLocalStorage() {
     if (storedMemos) {
         memoList = JSON.parse(storedMemos);
         memoList.forEach(function (memo) {
+
             displayMemo(memo.content);
+
+            // Display the feedbacks for the memo
+            if (memo.subMemos && memo.subMemos.length > 0) {
+                memo.subMemos.forEach(function (feedbackText) {
+                    var feedbackDiv = document.createElement("div");
+                    feedbackDiv.textContent = "피드백: " + feedbackText;
+                    document.getElementById("memo-list").lastChild.appendChild(feedbackDiv);
+                });
+            }
+
         });
     }
 }
