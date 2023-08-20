@@ -3,7 +3,7 @@ var isEditing = false;
 var memoToEdit = null;
 var memoList = [];
 
-// Load memos from local storage on page load
+// 페이지 로드 시 로컬 스토리지에서 메모를 불러옵니다
 function loadMemosFromLocalStorage() {
     var storedMemos = localStorage.getItem("memos");
     if (storedMemos) {
@@ -12,7 +12,7 @@ function loadMemosFromLocalStorage() {
 
             displayMemo(memo);
 
-            // Display the feedbacks for the memo
+            // 메모에 대한 피드백을 표시합니다
             if (memo.subMemos && memo.subMemos.length > 0) {
                 memo.subMemos.forEach(function (feedbackText) {
                     var feedbackDiv = document.createElement("div");
@@ -25,12 +25,12 @@ function loadMemosFromLocalStorage() {
     }
 }
 
-// Save memos to local storage
+// 메모를 로컬 스토리지에 저장합니다
 function saveMemosToLocalStorage() {
     localStorage.setItem("memos", JSON.stringify(memoList));
 }
 
-// Function to display a memo
+// 메모를 표시하는 함수입니다
 function displayMemo(memo) {
     var memoItem = document.createElement("div");
     memoItem.className = "memo";
@@ -49,6 +49,7 @@ function displayMemo(memo) {
         document.getElementById("add-button").textContent = "저장";
         memoToEdit = memoContent;
 
+
         var indexToEdit = memoList.findIndex(m => m.content === memoToEdit.textContent);
         if (indexToEdit > -1) {
             memoList[indexToEdit].content = memoText;
@@ -56,6 +57,7 @@ function displayMemo(memo) {
             newMemo.date = memoList[indexToEdit].date;
             memoList.splice(indexToEdit, 1, newMemo);  // Replace the original memo with the edited one
         }
+
     });
 
 
@@ -100,7 +102,7 @@ function displayMemo(memo) {
                 memoItem.appendChild(feedbackDiv);
 
                 // Update the memo object with the feedback
-                var index = memoList.findIndex(m => m.content === memoText);
+                var index = memoList.findIndex(m => m.content === memo.content);
                 if (index > -1) {
                     if (!memoList[index].subMemos) {
                         memoList[index].subMemos = [];
@@ -109,9 +111,10 @@ function displayMemo(memo) {
                     saveMemosToLocalStorage();
                 }
 
-                // Remove the feedback input and save button after saving the feedback
+                // 피드백을 저장한 후 피드백 입력 및 저장 버튼을 제거합니다
                 memoItem.removeChild(feedbackInput);
                 memoItem.removeChild(saveFeedbackButton);
+                saveMemosToLocalStorage();
             }
         });
 
@@ -141,7 +144,11 @@ document.getElementById("add-button").addEventListener("click", function () {
                 content: memoText,
                 subMemos: []
             };
-            memoList.push(editedMemo);
+            if (indexToEdit > -1) {
+                memoList.splice(indexToEdit, 1, editedMemo);
+            } else {
+                memoList.push(editedMemo);
+            }
 
         } else {
 
@@ -157,15 +164,15 @@ document.getElementById("add-button").addEventListener("click", function () {
             };
 
             memoList.push(newMemo);
-            displayMemo(newMemo);  // 전체 메모 객체를 전달합니다.
+            displayMemo(newMemo);  // 전체 메모 객체를 전달합니다
 
-            document.getElementById("memo").value = "";  // Clear the memo input field
+            document.getElementById("memo").value = "";  // 메모 입력 필드를 지웁니다
 
         }
-        // Save memos to local storage whenever a memo is added or edited
+        // 메모를 로컬 스토리지에 저장합니다 whenever a memo is added or edited
         saveMemosToLocalStorage();
     }
 });
 
-// Load memos from local storage when the page loads
+// 페이지가 로드될 때 로컬 스토리지에서 메모를 불러옵니다
 loadMemosFromLocalStorage();
