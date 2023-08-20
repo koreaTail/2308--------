@@ -49,9 +49,12 @@ function displayMemo(memo) {
         document.getElementById("add-button").textContent = "저장";
         memoToEdit = memoContent;
 
-        var indexToEdit = memoList.findIndex(m => m.content === memo.content);
+        var indexToEdit = memoList.findIndex(m => m.content === memoToEdit.textContent);
         if (indexToEdit > -1) {
-            memoList.splice(indexToEdit, 1);
+            memoList[indexToEdit].content = memoText;
+            // Re-assign the original date value to the edited memo
+            newMemo.date = memoList[indexToEdit].date;
+            memoList.splice(indexToEdit, 1, newMemo);  // Replace the original memo with the edited one
         }
     });
 
