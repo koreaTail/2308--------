@@ -20,7 +20,6 @@ function loadMemosFromLocalStorage() {
                     document.getElementById("memo-list").lastChild.appendChild(feedbackDiv);
                 });
             }
-
         });
     }
 }
@@ -44,10 +43,10 @@ function displayMemo(memo) {
     editButton.addEventListener("click", function () {
         isEditing = true;
 
-        document.getElementById("memo").value = memoContent.textContent;
+        document.getElementById("memo").value = memo.content;
 
         document.getElementById("add-button").textContent = "저장";
-        memoToEdit = memoContent;
+        memoToEdit = memo;
 
 
         var indexToEdit = memoList.findIndex(m => m.content === memoToEdit.textContent);
@@ -135,27 +134,14 @@ document.getElementById("add-button").addEventListener("click", function () {
     var memoText = document.getElementById("memo").value;
     if (memoText.trim() !== "") {
         if (isEditing && memoToEdit) {
-            memoToEdit.textContent = memoText;
+            // Update the content of the existing memo instead of pushing a new one
+            memoToEdit.content = memoText;
+            displayMemo(memoToEdit);  // Update the displayed memo list
             isEditing = false;
             memoToEdit = null;
             document.getElementById("memo").value = "";
-
             document.getElementById("add-button").textContent = "추가";
-
-            // Update the memo list with the edited content
-            var editedMemo = {
-                content: memoText,
-                subMemos: []
-            };
-            if (memoToEdit && memoToEdit.index !== undefined) {
-                memoList.splice(memoToEdit.index, 1, editedMemo);
-            }
-            else {
-                memoList.push(editedMemo);
-            }
-
         } else {
-
             var currentDate = new Date();
             var formattedDate = currentDate.getFullYear() + "-" +
                 (currentDate.getMonth() + 1).toString().padStart(2, '0') + "-" +
@@ -168,15 +154,11 @@ document.getElementById("add-button").addEventListener("click", function () {
             };
 
             memoList.push(newMemo);
-            displayMemo(newMemo);  // 전체 메모 객체를 전달합니다
-
-            document.getElementById("memo").value = "";  // 메모 입력 필드를 지웁니다
-
+            displayMemo(newMemo);
+            document.getElementById("memo").value = "";
         }
-        // 메모를 로컬 스토리지에 저장합니다 whenever a memo is added or edited
         saveMemosToLocalStorage();
     }
 });
 
-// 페이지가 로드될 때 로컬 스토리지에서 메모를 불러옵니다
 loadMemosFromLocalStorage();
